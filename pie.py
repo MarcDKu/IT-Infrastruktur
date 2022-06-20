@@ -8,6 +8,7 @@ from pprint import pprint
 def cls():
     os.system('cls' if os.name=='nt' else 'clear')
 
+#Einführung
 def starting_window():
     cls()
 
@@ -18,15 +19,10 @@ def starting_window():
     print('Heute backen wir einen Frankfurter Kranz!'.center(terminal_size.columns))
     print('\n\n\n')
 
-starting_window()
-
-
-#ingredients = {'Puddingpulver "Vanillegeschmack"' : '1 Päckchen', 'Zucker' : '275g', 'Milch' : '500 ml + 5 EL', 'Butter':'400g', 'Salz':'1 Prise', 'Vanillin Zucker':'1 Päckchen', 'Eier':4, 'Mehl':'500g', 'Speißestärke':'50g', 'Backulver':'1/2 Päckchen', 'Johannisbeergelee': '150g', 'Haselnuss-Krokant':'50g', 'Belegkirschen zum Verzieren': 'nach belieben', 'Fett und Mehl für die Form':' ', 'Frischhaltefolie':' '}
-ingredients = ['1 Päckchen Puddingpulver "Vanillegeschmack"', '275g Zucker',  '500 ml + 5 EL Milch', '400g Butter', '1 Prise Salz', '1 Päckchen Vanillin Zucker', '4 Eier', '500g Mehl', '50g Speißestärke', '1/2 Päckchen Backulver', '150g Johannisbeergelee', '50g Haselnuss-Krokant', 'Belegkirschen zum Verzieren', 'Fett und Mehl für die Form', 'Frischhaltefolie']
-
 #Einkaufen
 def shopping(ingredients):
-    print('Um diesen Kuchen backen zu können, benötigen wir Zutaten folgende Zutaten:\n')
+    print('Navigation im Folgenden über die Pfeiltasten. Auswahl mir Leertaste und Bestätigen mit Enter')
+    print('Um diesen Kuchen backen zu können, benötigen wir noch Zutaten folgende Zutaten:\n')
 
 
     # table = PrettyTable(['Index', 'Menge', 'Zutat'])
@@ -57,5 +53,14 @@ def shopping(ingredients):
         if len(selected_ingredients) < len(ingredients):
             leftover_ingredients = [x for x in ingredients if x not in selected_ingredients]
             ingredients = leftover_ingredients
+            cls()
+            print('Schöner Versuch, aber da fehlen noch %i Artikel' %len(ingredients))
             shopping(ingredients)
+
+
+
+#Logic
+starting_window()
+#ingredients = {'Puddingpulver "Vanillegeschmack"' : '1 Päckchen', 'Zucker' : '275g', 'Milch' : '500 ml + 5 EL', 'Butter':'400g', 'Salz':'1 Prise', 'Vanillin Zucker':'1 Päckchen', 'Eier':4, 'Mehl':'500g', 'Speißestärke':'50g', 'Backulver':'1/2 Päckchen', 'Johannisbeergelee': '150g', 'Haselnuss-Krokant':'50g', 'Belegkirschen zum Verzieren': 'nach belieben', 'Fett und Mehl für die Form':' ', 'Frischhaltefolie':' '}
+ingredients = ['1 Päckchen Puddingpulver "Vanillegeschmack"', '275g Zucker',  '500 ml + 5 EL Milch', '400g Butter', '1 Prise Salz', '1 Päckchen Vanillin Zucker', '4 Eier', '500g Mehl', '50g Speißestärke', '1/2 Päckchen Backulver', '150g Johannisbeergelee', '50g Haselnuss-Krokant', 'Belegkirschen zum Verzieren', 'Fett und Mehl für die Form', 'Frischhaltefolie']
 shopping(ingredients)
