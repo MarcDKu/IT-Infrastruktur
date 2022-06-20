@@ -20,11 +20,14 @@ def starting_window():
 
 starting_window()
 
+
+#ingredients = {'Puddingpulver "Vanillegeschmack"' : '1 Päckchen', 'Zucker' : '275g', 'Milch' : '500 ml + 5 EL', 'Butter':'400g', 'Salz':'1 Prise', 'Vanillin Zucker':'1 Päckchen', 'Eier':4, 'Mehl':'500g', 'Speißestärke':'50g', 'Backulver':'1/2 Päckchen', 'Johannisbeergelee': '150g', 'Haselnuss-Krokant':'50g', 'Belegkirschen zum Verzieren': 'nach belieben', 'Fett und Mehl für die Form':' ', 'Frischhaltefolie':' '}
+ingredients = ['1 Päckchen Puddingpulver "Vanillegeschmack"', '275g Zucker',  '500 ml + 5 EL Milch', '400g Butter', '1 Prise Salz', '1 Päckchen Vanillin Zucker', '4 Eier', '500g Mehl', '50g Speißestärke', '1/2 Päckchen Backulver', '150g Johannisbeergelee', '50g Haselnuss-Krokant', 'Belegkirschen zum Verzieren', 'Fett und Mehl für die Form', 'Frischhaltefolie']
+
 #Einkaufen
-def shopping():
+def shopping(ingredients):
     print('Um diesen Kuchen backen zu können, benötigen wir Zutaten folgende Zutaten:\n')
 
-    ingredients = {'Puddingpulver "Vanillegeschmack"' : '1 Päckchen', 'Zucker' : '275g', 'Milch' : '500 ml + 5 EL', 'Butter':'400g', 'Salz':'1 Prise', 'Vanillin Zucker':'1 Päckchen', 'Eier':4, 'Mehl':'500g', 'Speißestärke':'50g', 'Backulver':'1/2 Päckchen', 'Johannisbeergelee': '150g', 'Haselnuss-Krokant':'50g', 'Belegkirschen zum Verzieren': 'nach belieben', 'Fett und Mehl für die Form':' ', 'Frischhaltefolie':' '}
 
     # table = PrettyTable(['Index', 'Menge', 'Zutat'])
     # table.align
@@ -42,10 +45,17 @@ def shopping():
 
     question1_choice = ingredients
 
-    slested_ingredients = inquirer.checkbox(
-        message="Zutaten bitte abhaken:",
-        choices=question1_choice,
-        cycle=False,
-    ).execute()
+    all_ingredients_gathered = False
+    selected_ingredients=[]
+    while all_ingredients_gathered == False:
+        selected_ingredients = inquirer.checkbox(
+            message="Zutaten bitte abhaken:",
+            choices=question1_choice,
+            cycle=False,
+        ).execute()
 
-shopping()
+        if len(selected_ingredients) < len(ingredients):
+            leftover_ingredients = [x for x in ingredients if x not in selected_ingredients]
+            ingredients = leftover_ingredients
+            shopping(ingredients)
+shopping(ingredients)
