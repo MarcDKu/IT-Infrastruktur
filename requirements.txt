@@ -1,5 +1,6 @@
 inquirerpy==0.3.3
 pfzy==0.3.4
 Pillow==9.1.1
+progress==1.6
 prompt-toolkit==3.0.29
 wcwidth==0.2.5
