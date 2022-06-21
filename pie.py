@@ -1,6 +1,8 @@
 from __future__ import print_function, unicode_literals
 from asyncio.windows_events import NULL
+from multiprocessing.connection import wait
 import os
+from progress.bar import PixelBar
 from InquirerPy import  inquirer
 from PIL import Image 
 import time 
@@ -15,10 +17,10 @@ def cls():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
-#Einführung
+# Einführung
 def starting_window():
     cls()
-   
+
     terminal_size = os.get_terminal_size()
 
     # Begrüßung
@@ -26,7 +28,9 @@ def starting_window():
     print('Heute backen wir einen Frankfurter Kranz!'.center(terminal_size.columns))
     print('\n\n\n')
 
-#Einkaufen
+# Einkaufen
+
+
 def shopping(ingredients):
     print('Navigation im Folgenden über die Pfeiltasten. Auswahl mir Leertaste und Bestätigen mit Enter')
     print('Um diesen Kuchen backen zu können, benötigen wir noch Zutaten folgende Zutaten:\n')
@@ -42,7 +46,8 @@ def shopping(ingredients):
             cycle=False,
         ).execute()
         if len(selected_ingredients) < len(ingredients):
-            leftover_ingredients = [x for x in ingredients if x not in selected_ingredients]
+            leftover_ingredients = [
+                x for x in ingredients if x not in selected_ingredients]
             ingredients = leftover_ingredients
             cls()
             print('Schöner Versuch, aber da fehlen noch %i Artikel' %len(ingredients))
@@ -57,36 +62,72 @@ def shopping(ingredients):
 def cooking():
     print('Um den kuchen richtig zu backen, folgen sie den Anweisungen:\n')
     steps = ["Buttercreme machen", "Teig zusammenrüheren",
-         "Kuchen backen", "Schichten Stapeln", "Anrichten"]
-    
-    instructions = ['Für die Buttercreme Puddingpulver, 75 g Zucker und 100 ml Milch glatt rühren.\n  400 ml Milch aufkochen, vom Herd ziehen.\n  Angerührtes Puddingpulver einrühren, unter Rühren wieder aufkochen und ca. 1 Minute köcheln.\n  Pudding in eine Schüssel geben, direkt mit Folie abdecken und bei Zimmertemperatur auskühlen lassen.\n  Den Backofen Vorheizen (E-Herd: 175 °C/Umluft: 150 °C/Gas: Stufe 2).',
-                    '250 g Butter bei Zimmertemperatur lagern.\n  Für den Teig 150 g Butter, Salz, 200 g Zucker und Vanillin-Zucker mit den Schneebesen des Handrührgerätes schaumig rühren.\n  Eier nacheinander unterrühren.\n  Mehl, Stärke und Backpulver mischen, abwechselnd mit 5 EL Milch unter die Fett-Ei-Creme rühren.',
-                    'Eine Frankfurter-Kranz-Form bzw. Ringform (1,4 Liter Inhalt; 22 cm Ø) gut fetten und mit Mehl ausstäuben.\n  Teig einfüllen und glatt streichen.\n  Im vorgeheizten Backofen (E-Herd: 175 °C/Umluft: 150 °C/Gas: Stufe 2) 30-40 Minuten backen.\n  Auf einem Kuchengitter leicht abkühlen lassen.\n  Aus der Form stürzen und vollständig auskühlen lassen.',
-                    'Bei Zimmertemperatur gelagerte Butter mit den Schneebesen des Handrührgerätes cremig weiß (ca. 15 Minuten) aufschlagen.\n  Pudding esslöffelweise nach und nach unterrühren.\n  Gelee glatt rühren.\n  Ausgekühlten Kuchen zweimal waagerecht durchschneiden.\n  Johannisbeergelee auf den unteren Boden streichen.\n  1/4 der Creme auf dem Gelee verteilen und glatt streichen.\n  Den zweiten Boden darauflegen und mit einem weiteren Viertel bestreichen.\n  Dritten Boden als Deckel darauflegen.',
-                    'Etwas Creme in einen Spritzbeutel mit Sterntülle füllen.\n  Rundherum mit der restliche Creme einstreichen.\n  Kranz mit Krokant bestreuen.\n  Restliche Creme als Tuffs auf den Kranz spritzen.\n  Kirschen halbieren, auf die Tuffs setzen.\n  Ca. 2 Stunden kalt stellen']
+             "Kuchen backen", "Schichten Stapeln", "Anrichten"]
 
-    while len(steps) > 0:                                                                               #Ausführen, solange nicht alle Schritte erledigt sind
-        selected_instructions = inquirer.rawlist(
+    instructions = ['Für die Buttercreme Puddingpulver, 75 g Zucker und 100 ml Milch glatt rühren.\n  400 ml Milch aufkochen, vom Herd ziehen.\n  Angerührtes Puddingpulver einrühren, unter Rühren wieder aufkochen und ca. ‎1 Minute köcheln.\nPudding in eine Schüssel geben, direkt mit Folie abdecken und bei Zimmertemperatur auskühlen lassen.\n  Den Backofen Vorheizen (E-Herd: 175 °C/Umluft: 150 °C/Gas: Stufe 2).',
+                    '250 g Butter bei Zimmertemperatur lagern.\n  Für den Teig 150 g Butter, Salz, 200 g Zucker und Vanillin-Zucker mit den Schneebesen des Handrührgerätes schaumig rühren.\n  Eier nacheinander unterrühren.\n  Mehl, Stärke und Backpulver mischen, abwechselnd mit 5 EL Milch unter die Fett-Ei-Creme rühren.',
+                    'Eine Frankfurter-Kranz-Form bzw. Ringform (1,4 Liter Inhalt; 22 cm Ø) gut fetten und mit Mehl ausstäuben.\n  Teig einfüllen und glatt streichen.\n  Im vorgeheizten Backofen (E-Herd: 175 °C/Umluft: 150 °C/Gas: Stufe 2) ‎35 Minuten backen.\nAuf einem Kuchengitter leicht abkühlen lassen.\n  Aus der Form stürzen und vollständig auskühlen lassen.',
+                    'Bei Zimmertemperatur gelagerte Butter mit den Schneebesen des Handrührgerätes cremig weiß (ca. ‎15 Minuten) aufschlagen.\nPudding esslöffelweise nach und nach unterrühren.\n  Gelee glatt rühren.\n  Ausgekühlten Kuchen zweimal waagerecht durchschneiden.\n  Johannisbeergelee auf den unteren Boden streichen.\n  1/4 der Creme auf dem Gelee verteilen und glatt streichen.\n  Den zweiten Boden darauflegen und mit einem weiteren Viertel bestreichen.\n  Dritten Boden als Deckel darauflegen.',
+                    'Etwas Creme in einen Spritzbeutel mit Sterntülle füllen.\n  Rundherum mit der restliche Creme einstreichen.\n  Kranz mit Krokant bestreuen.\n  Restliche Creme als Tuffs auf den Kranz spritzen.\n  Kirschen halbieren, auf die Tuffs setzen.\n  Ca. ‎120 Minuten kalt stellen. \nDer Kuchen kann jetzt serviert werden!']
+
+    while len(steps) > 0:                                                                                               # Ausführen, solange nicht alle Schritte erledigt sind
+
+        selected_instructions = inquirer.rawlist(                                                                       # Anzeigen der verscheidenen Schritte, welche noch erledigt werden müssen
             message="Wählen Sie den gewünschten Schritt aus:",
             choices=steps,
             default=1,
             multiselect=False
         ).execute()
+
         i = 0
-        while type(selected_instructions) != int:                                                       #Nach index von ausgewwähltem Wert suchen
+        while type(selected_instructions) != int:                                                                       # Nach index von ausgewwähltem Wert suchen
             if selected_instructions == steps[i]:
+                shownText = [instructions[i]]
                 selected_instructions = i
+                
             else:
                 i += 1
 
-        shown_instructions = inquirer.confirm(                                                          #Details anzeigen
-            message=instructions[selected_instructions],
-            confirm_letter="‎",
-            reject_letter="‎",
-            transformer= lambda result: "‎Im" if result else "Schritt abgeschlossen\n",
-        ).execute()
-        steps.pop(selected_instructions)                                                                #Array kürzen
+            if instructions[i].find("Minute") != -1:                                                                   # Aufteilen des Texteiles in den Text vor der Zeiteingabe, der Zeitangabe selbst und dem Teil nach der Zeitangabe 
+                shownText = [instructions[i][0:instructions[i].find("\n", instructions[i].find("Minute"))],
+                            int(instructions[i][instructions[i].find("‎")+1:instructions[i].find(" Minute")]),
+                            instructions[i][(instructions[i].find("\n", instructions[i].find("Minute"))+1):-1]]    
+           
+            if len(shownText) == 3:                                                                                    # Wenn Zeitangaben da sind, wird zuerst der Erste Text angezeigt, dannacht der Timer, und schließlich wieder Text  
+                shown_instructions = inquirer.confirm(                                                                 
+                    message=shownText[0],
+                    confirm_letter="‎",
+                    reject_letter="‎",
+                    transformer=lambda result: "‎Im" if result else "Schritt abgeschlossen\n",
+                ).execute()
+
+                bar = PixelBar('  Warten sie, bis der Timer abgelaufen ist!', max=shownText[1])
+                for i in range(shownText[1]):
+                    time.sleep(1)
+                    bar.next()
+                bar.finish()
+
+                shown_instructions = inquirer.confirm(  
+                    message=shownText[2],
+                    confirm_letter="‎",
+                    reject_letter="‎",
+                    transformer=lambda result: "‎Im" if result else "Schritt abgeschlossen\n",
+                ).execute()
+
+                shownText.clear
+                cls()
+
+            else:                                                                                                   # Ansonsten nur die Details anzeigen
+                shown_instructions = inquirer.confirm( 
+                    message=shownText[0],
+                    confirm_letter="‎",
+                    reject_letter="‎",
+                    transformer=lambda result: "‎Im" if result else "Schritt abgeschlossen\n",
+                ).execute()
+
+        steps.pop(selected_instructions)  # Array kürzen
         instructions.pop(selected_instructions)
+        cls()
 
 
 
