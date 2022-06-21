@@ -1,9 +1,9 @@
 from __future__ import print_function, unicode_literals
 from asyncio.windows_events import NULL
 import os
-from prettytable import PrettyTable
 from InquirerPy import  inquirer
 from PIL import Image 
+import time 
 #import aalib
 
 
@@ -94,46 +94,43 @@ def finish():
     cls()
     terminal_size = os.get_terminal_size()
     print('')
-    print('Herzlichen Glückwunsch, ihr Kuchen solle nun  aussehen wie im Fenster, das sich eben geöffnet hat'.center(terminal_size.columns))
-
-    img = Image.open('frankfurter-kranz.jpg')
-    img.show() 
+    print('Herzlichen Glückwunsch, Sie haben einen Kuchen gebacken!!!')
 
     ###############################################ASCII Art##########################################################
-    # path = 'kuchen3.jpg'
+    path = 'kuchen.jpg'
     
-    # try:
-    #     img = Image.open(path)
-    # except:
-    #     print(path, "Unable to find image ")
+    try:
+        img = Image.open(path)
+    except:
+        print(path, "Unable to find image ")
     
-    # width, height = img.size
-    # aspect_ratio = height/width
-    # new_width = int(terminal_size.columns*0.5)
-    # new_height = aspect_ratio * new_width * 0.55
-    # img = img.resize((new_width, int(new_height)))
+    width, height = img.size
+    aspect_ratio = height/width
+    new_width = int(terminal_size.columns*0.5)
+    new_height = aspect_ratio * new_width * 0.55
+    img = img.resize((new_width, int(new_height)))
     
-    # img = img.convert('L')
+    img = img.convert('L')
     
-    # chars = ["@", "J", "D", "%", "W", "O", "y", "+", "*", ",", "."]
+    chars = ["@", "J", "D", "%", "+", "*", ",", "."]
     
-    # pixels = img.getdata()
-    # new_pixels = [chars[pixel//25] for pixel in pixels]
-    # new_pixels = ''.join(new_pixels)
-    # new_pixels_count = len(new_pixels)
-    # ascii_image = [new_pixels[index:index + new_width] for index in range(0, new_pixels_count, new_width)]
-    # ascii_image = "\n".join(ascii_image)
-    # print(ascii_image.center(terminal_size.columns))    
+    pixels = img.getdata()
+    new_pixels = [chars[pixel//36] for pixel in pixels]
+    new_pixels = ''.join(new_pixels)
+    new_pixels_count = len(new_pixels)
+    ascii_image = [new_pixels[index:index + new_width] for index in range(0, new_pixels_count, new_width)]
+    ascii_image = "\n".join(ascii_image)
+    print(ascii_image.center(terminal_size.columns))    
     ###############################################ASCII Art##########################################################
-
+    time.sleep(10)
 
 
 #------------------------------------------------------------------------------
 #Logic
-#starting_window()
+starting_window()
 ingredients = {'Puddingpulver "Vanillegeschmack"' : '1 Päckchen', 'Zucker' : '275g', 'Milch' : '500 ml + 5 EL', 'Butter':'400g', 'Salz':'1 Prise', 'Vanillin Zucker':'1 Päckchen', 'Eier':4, 'Mehl':'500g', 'Speißestärke':'50g', 'Backulver':'1/2 Päckchen', 'Johannisbeergelee': '150g', 'Haselnuss-Krokant':'50g', 'Belegkirschen zum Verzieren': 'nach belieben', 'Fett und Mehl für die Form':' ', 'Frischhaltefolie':' '}
-#shopping(ingredients)
-#cooking()
+shopping(ingredients)
+cooking()
 finish()
 
 

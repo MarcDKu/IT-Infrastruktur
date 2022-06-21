@@ -1,4 +1,5 @@
-prettxtable
-
-
-#Druckfenster zum Ausdrucken der Liste öffnen
+inquirerpy==0.3.3
+pfzy==0.3.4
+Pillow==9.1.1
+prompt-toolkit==3.0.29
+wcwidth==0.2.5
