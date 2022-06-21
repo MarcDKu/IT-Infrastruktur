@@ -9,7 +9,7 @@ import time
 #import aalib
 
 
-ingredients = ['1 Päckchen Puddingpulver "Vanillegeschmack"', '275g Zucker',  '500 ml + 5 EL Milch', '400g Butter', '1 Prise Salz', '1 Päckchen Vanillin Zucker', '4 Eier', '500g Mehl', '50g Speißestärke', '1/2 Päckchen Backulver', '150g Johannisbeergelee', '50g Haselnuss-Krokant', 'Belegkirschen zum Verzieren', 'Fett und Mehl für die Form', 'Frischhaltefolie']
+ingredients = ['1 Päckchen Puddingpulver "Vanillegeschmack"', '275g Zucker',  '500 ml + 5 EL Milch', '400g Butter', '1 Prise Salz', '1 Päckchen Vanillin Zucker', '4 Eier', '500g Mehl', '50g Speisestärke', '1/2 Päckchen Backpulver', '150g Johannisbeergelee', '50g Haselnuss-Krokant', 'Belegkirschen zum Verzieren', 'Fett und Mehl für die Form', 'Frischhaltefolie']
 
 
 # Konsole aufräumen
@@ -61,7 +61,7 @@ def shopping(ingredients):
 # Backen
 def cooking():
     print('Um den kuchen richtig zu backen, folgen sie den Anweisungen:\n')
-    steps = ["Buttercreme machen", "Teig zusammenrüheren",
+    steps = ["Buttercreme machen", "Teig zusammenrühren",
              "Kuchen backen", "Schichten Stapeln", "Anrichten"]
 
     instructions = ['Für die Buttercreme Puddingpulver, 75 g Zucker und 100 ml Milch glatt rühren.\n  400 ml Milch aufkochen, vom Herd ziehen.\n  Angerührtes Puddingpulver einrühren, unter Rühren wieder aufkochen und ca. ‎1 Minute köcheln.\nPudding in eine Schüssel geben, direkt mit Folie abdecken und bei Zimmertemperatur auskühlen lassen.\n  Den Backofen Vorheizen (E-Herd: 175 °C/Umluft: 150 °C/Gas: Stufe 2).',
@@ -72,7 +72,7 @@ def cooking():
 
     while len(steps) > 0:                                                                                               # Ausführen, solange nicht alle Schritte erledigt sind
 
-        selected_instructions = inquirer.rawlist(                                                                       # Anzeigen der verscheidenen Schritte, welche noch erledigt werden müssen
+        selected_instructions = inquirer.rawlist(                                                                       # Anzeigen der verschiedenen Schritte, welche noch erledigt werden müssen
             message="Wählen Sie den gewünschten Schritt aus:",
             choices=steps,
             default=1,
@@ -80,7 +80,7 @@ def cooking():
         ).execute()
 
         i = 0
-        while type(selected_instructions) != int:                                                                       # Nach index von ausgewwähltem Wert suchen
+        while type(selected_instructions) != int:                                                                       # Nach index von ausgewählten Wert suchen
             if selected_instructions == steps[i]:
                 shownText = [instructions[i]]
                 selected_instructions = i
@@ -88,12 +88,12 @@ def cooking():
             else:
                 i += 1
 
-            if instructions[i].find("Minute") != -1:                                                                   # Aufteilen des Texteiles in den Text vor der Zeiteingabe, der Zeitangabe selbst und dem Teil nach der Zeitangabe 
+            if instructions[i].find("Minute") != -1:                                                                   # Aufteilen des Texteils in den Text vor der Zeiteingabe, der Zeitangabe selbst und dem Teil nach der Zeitangabe 
                 shownText = [instructions[i][0:instructions[i].find("\n", instructions[i].find("Minute"))],
                             int(instructions[i][instructions[i].find("‎")+1:instructions[i].find(" Minute")]),
                             instructions[i][(instructions[i].find("\n", instructions[i].find("Minute"))+1):-1]]    
            
-            if len(shownText) == 3:                                                                                    # Wenn Zeitangaben da sind, wird zuerst der Erste Text angezeigt, dannacht der Timer, und schließlich wieder Text  
+            if len(shownText) == 3:                                                                                    # Wenn Zeitangaben da sind, wird zuerst der Erste Text angezeigt, danach der Timer, und schließlich wieder Text  
                 shown_instructions = inquirer.confirm(                                                                 
                     message=shownText[0],
                     confirm_letter="‎",
@@ -103,7 +103,7 @@ def cooking():
 
                 bar = PixelBar('  Warten sie, bis der Timer abgelaufen ist!', max=shownText[1])
                 for i in range(shownText[1]):
-                    time.sleep(1)
+                    time.sleep(.25)
                     bar.next()
                 bar.finish()
 
