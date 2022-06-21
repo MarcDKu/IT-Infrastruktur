@@ -1,15 +1,16 @@
 from __future__ import print_function, unicode_literals
 from asyncio.windows_events import NULL
-from operator import index
 import os
 from prettytable import PrettyTable
-from InquirerPy import prompt, inquirer
-from pprint import pprint
+from InquirerPy import  inquirer
+from PIL import Image 
+#import aalib
+
+
+ingredients = ['1 Päckchen Puddingpulver "Vanillegeschmack"', '275g Zucker',  '500 ml + 5 EL Milch', '400g Butter', '1 Prise Salz', '1 Päckchen Vanillin Zucker', '4 Eier', '500g Mehl', '50g Speißestärke', '1/2 Päckchen Backulver', '150g Johannisbeergelee', '50g Haselnuss-Krokant', 'Belegkirschen zum Verzieren', 'Fett und Mehl für die Form', 'Frischhaltefolie']
 
 
 # Konsole aufräumen
-
-
 def cls():
     os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -30,25 +31,11 @@ def shopping(ingredients):
     print('Navigation im Folgenden über die Pfeiltasten. Auswahl mir Leertaste und Bestätigen mit Enter')
     print('Um diesen Kuchen backen zu können, benötigen wir noch Zutaten folgende Zutaten:\n')
 
-
-    # table = PrettyTable(['Index', 'Menge', 'Zutat'])
-    # table.align
-    # counter = 1
-    # for key in ingredients.keys():
-    #     table.add_row([counter, ingredients[key], key])
-    #     counter+=1
-
-    # counter-=1
-
-    # print(table)
-    # print('Geben Sie den Index einer Zutat ein, die sie bereits besitzen:')
-    # input = int(input()
-
-    question1_choice = ingredients
-
     all_ingredients_gathered = False
     selected_ingredients=[]
+
     while all_ingredients_gathered == False:
+        question1_choice = ingredients
         selected_ingredients = inquirer.checkbox(
             message="Zutaten bitte abhaken:",
             choices=question1_choice,
@@ -59,9 +46,11 @@ def shopping(ingredients):
             ingredients = leftover_ingredients
             cls()
             print('Schöner Versuch, aber da fehlen noch %i Artikel' %len(ingredients))
-            shopping(ingredients)
         else:
             all_ingredients_gathered = True
+            leftover_ingredients = [x for x in ingredients if x not in selected_ingredients]
+            ingredients = leftover_ingredients
+            cls()
 
 
 # Backen
@@ -101,11 +90,51 @@ def cooking():
 
 
 
+def finish():
+    cls()
+    terminal_size = os.get_terminal_size()
+    print('')
+    print('Herzlichen Glückwunsch, ihr Kuchen solle nun  aussehen wie im Fenster, das sich eben geöffnet hat'.center(terminal_size.columns))
+
+    img = Image.open('frankfurter-kranz.jpg')
+    img.show() 
+
+    ###############################################ASCII Art##########################################################
+    # path = 'kuchen3.jpg'
+    
+    # try:
+    #     img = Image.open(path)
+    # except:
+    #     print(path, "Unable to find image ")
+    
+    # width, height = img.size
+    # aspect_ratio = height/width
+    # new_width = int(terminal_size.columns*0.5)
+    # new_height = aspect_ratio * new_width * 0.55
+    # img = img.resize((new_width, int(new_height)))
+    
+    # img = img.convert('L')
+    
+    # chars = ["@", "J", "D", "%", "W", "O", "y", "+", "*", ",", "."]
+    
+    # pixels = img.getdata()
+    # new_pixels = [chars[pixel//25] for pixel in pixels]
+    # new_pixels = ''.join(new_pixels)
+    # new_pixels_count = len(new_pixels)
+    # ascii_image = [new_pixels[index:index + new_width] for index in range(0, new_pixels_count, new_width)]
+    # ascii_image = "\n".join(ascii_image)
+    # print(ascii_image.center(terminal_size.columns))    
+    ###############################################ASCII Art##########################################################
+
+
 
 #------------------------------------------------------------------------------
 #Logic
-starting_window()
-#ingredients = {'Puddingpulver "Vanillegeschmack"' : '1 Päckchen', 'Zucker' : '275g', 'Milch' : '500 ml + 5 EL', 'Butter':'400g', 'Salz':'1 Prise', 'Vanillin Zucker':'1 Päckchen', 'Eier':4, 'Mehl':'500g', 'Speißestärke':'50g', 'Backulver':'1/2 Päckchen', 'Johannisbeergelee': '150g', 'Haselnuss-Krokant':'50g', 'Belegkirschen zum Verzieren': 'nach belieben', 'Fett und Mehl für die Form':' ', 'Frischhaltefolie':' '}
-ingredients = ['1 Päckchen Puddingpulver "Vanillegeschmack"', '275g Zucker',  '500 ml + 5 EL Milch', '400g Butter', '1 Prise Salz', '1 Päckchen Vanillin Zucker', '4 Eier', '500g Mehl', '50g Speißestärke', '1/2 Päckchen Backulver', '150g Johannisbeergelee', '50g Haselnuss-Krokant', 'Belegkirschen zum Verzieren', 'Fett und Mehl für die Form', 'Frischhaltefolie']
-shopping(ingredients)
-cooking()
+#starting_window()
+ingredients = {'Puddingpulver "Vanillegeschmack"' : '1 Päckchen', 'Zucker' : '275g', 'Milch' : '500 ml + 5 EL', 'Butter':'400g', 'Salz':'1 Prise', 'Vanillin Zucker':'1 Päckchen', 'Eier':4, 'Mehl':'500g', 'Speißestärke':'50g', 'Backulver':'1/2 Päckchen', 'Johannisbeergelee': '150g', 'Haselnuss-Krokant':'50g', 'Belegkirschen zum Verzieren': 'nach belieben', 'Fett und Mehl für die Form':' ', 'Frischhaltefolie':' '}
+#shopping(ingredients)
+#cooking()
+finish()
+
+
+                                                                             
